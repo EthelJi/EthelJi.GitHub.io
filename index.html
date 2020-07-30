@@ -64,10 +64,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-helloo-hexo" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Vue中常用的过滤器-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/07/30/helloo-hexo/" class="article-date">
-  <time datetime="2020-07-30T08:03:08.000Z" itemprop="datePublished">2020-07-30</time>
+    <a href="/2020/07/30/Vue%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BF%87%E6%BB%A4%E5%99%A8-1/" class="article-date">
+  <time datetime="2020-07-30T08:14:50.000Z" itemprop="datePublished">2020-07-30</time>
 </a>
     
   </div>
@@ -78,7 +78,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/07/30/helloo-hexo/">helloo hexo</a>
+      <a class="article-title" href="/2020/07/30/Vue%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BF%87%E6%BB%A4%E5%99%A8-1/">Vue中常用的过滤器</a>
     </h1>
   
 
@@ -90,7 +90,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/30/helloo-hexo/" data-id="ckd8iguio00020suj3da43uem" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/07/30/Vue%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BF%87%E6%BB%A4%E5%99%A8-1/" data-id="ckd8ix71z00007ouj791f6ux8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -210,127 +210,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/18/Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" data-id="ckd8iguig00010suj9ltadnlc" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Vue的组件通信方式-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/04/13/Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F-1/" class="article-date">
-  <time datetime="2019-04-13T06:01:48.000Z" itemprop="datePublished">2019-04-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/13/Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F-1/">Vue的组件通信方式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong><em>vue组件传值几种方式</em></strong></p>
-<p><em>1.父组件通过prop向子组件传值</em></p>
-<p><em>2.子组件通过this.$emit()触发父组组件传递过来的方法向父组件传值</em></p>
-<p><em>3.兄弟组件之间不能直接传值，需要通过父组件来做间接传值，在这种情况下推荐使用vuex</em></p>
-<p><em>4.中央事件总线：</em></p>
-<p>//Bus.$emit 发送消息</p>
-<p>Bus.$emit(‘inceptMessage’, this.msg)</p>
-<p>//Bus.$on  接收消息</p>
-<p>Bus.$on(‘inceptMessage’,(msg) =&gt; {</p>
-<p>​    this.fromComponentAMsg = msg</p>
-<p>})</p>
-<p><strong><em>下面着重介绍一下父子之间的通信方式：</em></strong></p>
-<p><strong>一、父组件向子组件传递数据：</strong></p>
-<ol>
-<li>1 父组件中使用子组件的时候通过 v-bind 向子组件传递数据</li>
-</ol>
-<!-- 动态赋予一个变量的值 -->
-
-<p><blog-post v-bind:title="post.title"></blog-post></p>
-<p>1.2 子组件中声明props来接收父组件传递过来的数据：</p>
-<p>export default {</p>
-<p> props : [“title”]</p>
-<p>}</p>
-<p>//或者</p>
-<p>export default {</p>
-<p> props : {</p>
-<pre><code> title:&#123;
-
-  type:string,</code></pre>
-<p>​    default:””</p>
-<p>  }</p>
-<p> }</p>
-<p>}</p>
-<p><strong>二、子组件向父组件传递数据：</strong></p>
-<p>主要步骤：</p>
-<p>1、在父组件创建子组件实例的时候，通过v-on给子组件传递一个自定义事件。</p>
-<p>2、在子组件 中 通过’$emit’触发 当前实例上的 自定义事件。</p>
-<p>父组件中：</p>
-<template>
-    <div class="fatherPageWrap">
-          <h1>这是父组件</h1>
-          <!-- 引入子组件，v-on监听自定义事件 -->
-          <emitChild v-on:emitMethods="fatherMethod"></emitChild>
-    </div>
-</template>
-
-<script type="text/javascript">
-    import emitChild from '@/page/children/emitChild.vue';
-    export default{
-        data () {
-            return {}
-        },
-        components : {
-            emitChild
-        },
-        methods : {
-            fatherMethod(params){
-                 alert(JSON.stringify(params));
-            }
-        }
-    }
-</script>
-
-<p>子组件中：</p>
-<template>
-    <div class="childPageWrap">
-         <h1>这是子组件</h1>
-    </div>
-</template>
-
-<script type="text/javascript">
-    export default{
-        data () {
-           return {}
-        },
-        mounted () {
-           //通过 emit 触发
-           this.$emit('emitMethods',{"name" : 123});
-        }
-    }
-</script>
-
-
-<p>结果：子组件会调用父组件的fatherMethod 方法，并且会alert 传递过去的参数：{“name”:123}</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/13/Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F-1/" data-id="ckd8igui400000sujfoyif9zp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/18/Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" data-id="ckd8ix72800027ouj4b2k5qs7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -464,7 +344,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/20/javascript%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/" data-id="ckd8iguis00030sujgomi4ctl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/20/javascript%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/" data-id="ckd8ix72600017oujd3iv8x8d" class="article-share-link">Share</a>
       
       
     </footer>
@@ -492,7 +372,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li></ul>
     </div>
   </div>
 
@@ -505,15 +385,11 @@
       <ul>
         
           <li>
-            <a href="/2020/07/30/helloo-hexo/">helloo hexo</a>
+            <a href="/2020/07/30/Vue%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BF%87%E6%BB%A4%E5%99%A8-1/">Vue中常用的过滤器</a>
           </li>
         
           <li>
             <a href="/2019/05/18/Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/">Vue的组件通信方式</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/13/Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F-1/">Vue的组件通信方式</a>
           </li>
         
           <li>
