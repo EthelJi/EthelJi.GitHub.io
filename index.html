@@ -64,6 +64,54 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-npm-run-dev的执行过程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/21/npm-run-dev%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/" class="article-date">
+  <time datetime="2019-12-21T07:54:19.000Z" itemprop="datePublished">2019-12-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/21/npm-run-dev%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/">npm run dev的执行过程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>vue开发命令 <code>npm run dev</code> 输入后的执行过程大致有以下几个步骤：</p>
+<p><strong>1.npm run dev 是执行配置在package.json中的脚本，比如：</strong></p>
+<p>“scripts”: {<br>    “dev”: “webpack-dev-server –inline –progress –config webpack.conf.js”,<br>    “start”: “npm run dev”,<br>    “lint”: “eslint –ext .js,.vue src”,<br>    “build”: “node build/build.js”<br>  },</p>
+<p>npm run dev 执行的就是webpack-dev-server –inline ….命令,通过webpack-dev-server开启一个本地调试服务器。</p>
+<p><strong>2.在webpack.conf.js文件中找到App的入口文件  ./src/main.js</strong></p>
+<p>entry: {<br>   app: ‘./src/main.js’<br>},</p>
+<p><strong>3.main.js用到了页面元素#app、用到了路由和根组件App，并根据这些信息创建一个vue实例。</strong></p>
+<p>new Vue({<br>     el: ‘#app’,<br>     router,<br>     components: { App },<br>     template: ‘<App/>‘<br>})</p>
+<p><strong>4.webpack-dev-server会将main.js中的代码以及所有引用打包成一个bundle.js，然后配置到内存中。</strong></p>
+<p><strong>5.webpack.conf.js中配置的HtmlWebpackPlugin会将index.html文件配置到内存，并且将内存中的bundle.js注入到内存中的index.html中。</strong></p>
+<p><strong>6.根据webpack.config.js中所配置的devServer的信息，会决定是否自动打开浏览器呈现网页。</strong></p>
+<p>devServer: {<br>    open: true, // 自动打开浏览器<br>    port: 3000, // 设置启动时候的运行端口<br>    contentBase: ‘src’, // 指定托管的根目录<br>    hot: true // 启用热更新 的 第1步<br>}</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/12/21/npm-run-dev%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/" data-id="ckd9xjsfq0000xgujazrb90fl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Vue的计算属性和侦听属性" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/09/11/Vue%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BE%A6%E5%90%AC%E5%B1%9E%E6%80%A7/" class="article-date">
@@ -471,7 +519,7 @@ var watchExampleVM = new Vue({
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li></ul>
     </div>
   </div>
 
@@ -482,6 +530,10 @@ var watchExampleVM = new Vue({
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/12/21/npm-run-dev%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/">npm run dev的执行过程</a>
+          </li>
         
           <li>
             <a href="/2019/09/11/Vue%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BE%A6%E5%90%AC%E5%B1%9E%E6%80%A7/">Vue的计算属性和侦听属性</a>
