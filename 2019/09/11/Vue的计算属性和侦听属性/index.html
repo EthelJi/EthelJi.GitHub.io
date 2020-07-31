@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Vue的计算属性和侦听属性 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.计算属性（computed）         Original message: &quot;&quot;      Computed reversed message: &quot;&quot;   var vm &#x3D; new Vue({  el: ‘#example’,  data: {    message: ‘Hello’  },  computed: {    &#x2F;&#x2F; 计算属性的 getter    reversedMessa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue的计算属性和侦听属性">
+<meta property="og:url" content="http://yoursite.com/2019/09/11/Vue%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BE%A6%E5%90%AC%E5%B1%9E%E6%80%A7/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.计算属性（computed）         Original message: &quot;&quot;      Computed reversed message: &quot;&quot;   var vm &#x3D; new Vue({  el: ‘#example’,  data: {    message: ‘Hello’  },  computed: {    &#x2F;&#x2F; 计算属性的 getter    reversedMessa">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-09-11T07:41:40.000Z">
+<meta property="article:modified_time" content="2020-07-31T07:42:55.783Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Vue的计算属性和侦听属性" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/11/Vue%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BE%A6%E5%90%AC%E5%B1%9E%E6%80%A7/" class="article-date">
+  <time datetime="2019-09-11T07:41:40.000Z" itemprop="datePublished">2019-09-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Vue的计算属性和侦听属性
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>1.计算属性（computed）</strong></p>
+<div id="example">   
+    <p>Original message: ""</p> 
+    <p>Computed reversed message: ""</p>
+</div>
+
+<p>var vm = new Vue({<br>  el: ‘#example’,<br>  data: {<br>    message: ‘Hello’<br>  },<br>  computed: {<br>    // 计算属性的 getter<br>    reversedMessage: function () {<br>      // <code>this</code> 指向 vm 实例<br>      return this.message.split(‘’).reverse().join(‘’)<br>    }<br>  }<br>})</p>
+<p>上面的运行结果为：</p>
+<p>Original message: “Hello” </p>
+<p>Computed reversed message: “olleH”</p>
+<p>在上面的例子中，声明了一个计算属性reversedMessage。我们提供的函数将用作属性vm.reversedMessage的getter函数。</p>
+<p>console.log(vm.reversedMessage) // =&gt; ‘olleH’ </p>
+<p>vm.message = ‘Goodbye’ </p>
+<p>console.log(vm.reversedMessage) // =&gt; ‘eybdooG’</p>
+<p>这时候如果通过浏览器的控制台自行修改例子中的vm的话，vm.reversedMessage的值将会始终取决于vm.message的值。</p>
+<p>我们可以像绑定普通的属性那样在模板中绑定计算属性。因为vue知道vm.reversedMessage是依赖于vm.message的，因此当vm.message的值发生改变的时候，所有依赖于vm.reversedMessage的绑定也会更新。而且最妙之处在于，我们已经以声明式的方式创建了这种依赖关系：计算属性的getter函数是没有副作用（side effect）的，因为它并不会改变被依赖的属性值。比如前面的vm.reversedMessage并不会改变vm.message的值（单向依赖），使得计算属性易于测试和理解。</p>
+<p><strong>计算属性的getter</strong></p>
+<p>计算属性默认只有getter，不过在需要的时候，也可以提供一个setter。</p>
+<p>computed: {  </p>
+<p>​    fullName: {    </p>
+<p>​     // getter    </p>
+<p>​    get: function () {      </p>
+<p>​         return this.firstName + ‘ ‘ + this.lastName   </p>
+<p>​    },   </p>
+<p>​     //setter   </p>
+<p>​    set: function (newValue) {     </p>
+<p>​       var names = newValue.split(‘ ‘)     </p>
+<p>​       this.firstName = names[0]      </p>
+<p>​       this.lastName = names[names.length - 1]    </p>
+<p>​     } </p>
+<p>   } </p>
+<p>}</p>
+<p>这个时候，如果再浏览器控制台中运行vm.fullName = ‘xxx xxxx’的时候，setter函数就会被调用，vm.firstName和vm.lastName也会相应地被更新。</p>
+<p><strong>侦听器（侦听属性）</strong></p>
+<p>vue提供了一种更通用的方式来观察和响应vue实例上的数据变动。虽然计算属性在大多数的情况下更合适，但是有时候也需要一个自定义的侦听器（侦听属性）。当需要在数据变化的时候执行异步或开销较大的操作时，这个方式十分有用。</p>
+<div id="watch-example">
+  <p>
+    Ask a yes/no question:
+    <input v-model="question">
+  </p>
+  <p></p>
+</div>
+
+<!-- 因为 AJAX 库和通用工具的生态已经相当丰富，Vue 核心代码没有重复 -->
+<!-- 提供这些功能以保持精简。这也可以让你自由选择自己更熟悉的工具。 -->
+
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<script>
+var watchExampleVM = new Vue({
+  el: '#watch-example',
+  data: {
+    question: '',
+    answer: 'I cannot give you an answer until you ask a question!'
+  },
+  watch: {
+    // 如果 `question` 发生改变，这个函数就会运行
+    question: function (newQuestion, oldQuestion) {
+      this.answer = 'Waiting for you to stop typing...'
+      this.debouncedGetAnswer()
+    }
+  },
+  created: function () {
+    // `_.debounce` 是一个通过 Lodash 限制操作频率的函数。
+    // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+    // AJAX 请求直到用户输入完毕才会发出。想要了解更多关于
+    // `_.debounce` 函数 (及其近亲 `_.throttle`) 的知识，
+    // 请参考：https://lodash.com/docs#debounce
+    this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+  },
+  methods: {
+    getAnswer: function () {
+      if (this.question.indexOf('?') === -1) {
+        this.answer = 'Questions usually contain a question mark. ;-)'
+        return
+      }
+      this.answer = 'Thinking...'
+      var vm = this
+      axios.get('http://www.yanggb.com.cn/api')
+        .then(function (response) {
+          vm.answer = _.capitalize(response.data.answer)
+        })
+        .catch(function (error) {
+          vm.answer = 'Error! Could not reach the API. ' + error
+        })
+    }
+  }
+})
+</script>
+
+<p>在这个示例中，使用watch选项允许我们执行异步操作 (访问一个API)，限制我们执行该操作的频率，并在我们得到最终结果前，设置中间状态。这些都是计算属性无法做到的。</p>
+<p><strong>侦听属性vs计算属性</strong></p>
+<p>当你有一些数据需要随着其它数据变动而变动时候，你很容易会滥用watch侦听属性，而通常更好的做法则是使用计算属性而不是命令式的watch回调。</p>
+<div id="demo"></div>
+
+<p>var vm = new Vue({<br>  el: ‘#demo’,<br>  data: {<br>    firstName: ‘Foo’,<br>    lastName: ‘Bar’,<br>    fullName: ‘Foo Bar’<br>  },<br>  watch: {<br>    firstName: function (val) {<br>      this.fullName = val + ‘ ‘ + this.lastName<br>    },<br>    lastName: function (val) {<br>      this.fullName = this.firstName + ‘ ‘ + val<br>    }<br>  }<br>})</p>
+<p>在上面的这段代码中，侦听了firstName和lastName两个属性，这两个属性如果发生了改变，则会触发侦听属性的回调函数，将两个属性值拼接到fullName属性中。这种方式是命令式的，且两个侦听属性功能重复。</p>
+<p>var vm = new Vue({<br>  el: ‘#demo’,<br>  data: {<br>    firstName: ‘Foo’,<br>    lastName: ‘Bar’<br>  },<br>  computed: {<br>    fullName: function () {<br>      return this.firstName + ‘ ‘ + this.lastName<br>    }<br>  }<br>})</p>
+<p>改成了声明式的计算属性之后，代码就显得简洁且清晰了很多。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/11/Vue%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BE%A6%E5%90%AC%E5%B1%9E%E6%80%A7/" data-id="ckd9x6t7p0000aoujazz5d381" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/18/Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Vue的组件通信方式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/11/Vue%E7%9A%84%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BE%A6%E5%90%AC%E5%B1%9E%E6%80%A7/">Vue的计算属性和侦听属性</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/18/Vue%E7%9A%84%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/">Vue的组件通信方式</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/20/javascript%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98/">JavaScript中this的指向问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
