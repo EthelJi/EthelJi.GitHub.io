@@ -719,11 +719,11 @@ var watchExampleVM = new Vue({
 
 
   
-    <article id="post-Javasript中常用代码总结" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Javascript中常用的代码片段总结" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2019/04/13/Javasript%E4%B8%AD%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E6%80%BB%E7%BB%93/" class="article-date">
-  	<time datetime="2019-04-13T10:24:40.000Z" itemprop="datePublished">2019-04-13</time>
+      <a href="/2019/04/13/Javascript%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E6%80%BB%E7%BB%93/" class="article-date">
+  	<time datetime="2019-04-13T10:29:05.000Z" itemprop="datePublished">2019-04-13</time>
 </a>
     </div>
   
@@ -736,8 +736,8 @@ var watchExampleVM = new Vue({
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/13/Javasript%E4%B8%AD%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E6%80%BB%E7%BB%93/">
-        Javasript中常用代码总结
+      <a class="article-title" href="/2019/04/13/Javascript%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E6%80%BB%E7%BB%93/">
+        Javascript中常用的代码片段总结
         
       </a>
     </h1>
@@ -748,22 +748,46 @@ var watchExampleVM = new Vue({
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>一、预加载图像</strong></p>
+        <p>一、预加载图像**</p>
 <p>如果你的网页中需要使用大量初始不可见的（例如，悬停的）图像，那么可以预加载这些图像。</p>
-<p><img src="D:\JisBlog\source\img\02.png"></p>
+<p> $.preloadImages = function(){</p>
+<p>​     for(var i=0; i&lt;arguments.length; i++){</p>
+<p>​      $(‘<img>‘).attr(‘src’, arguments[i])</p>
+<p>​      }</p>
+<p>}</p>
+<p>$.preloadImages(‘img/hover-on.png’,’img/hover-off.png’)</p>
 <p><strong>二、检查图像是否加载</strong></p>
 <p>有时为了继续脚本，你可能需要检查图像是否全部加载完毕。</p>
-<p><img src="D:\JisBlog\source\img\01.png"></p>
+<p>​     $(‘img’).load(function(){</p>
+<p>​       console.log(‘image load successful’)</p>
+<p>​    })</p>
 <p>也可以使用 ID 或 CLASS 替换<img> 标签来检查某个特定的图像是否被加载。</p>
 <p><strong>三、自动修复破坏的图像</strong></p>
-<p><img src="D:\JisBlog\source\img\03.png"></p>
+<p>  $(‘img’).on(‘error’,function(){</p>
+<p>​     if(! $(this).hasClass(‘broken-image’)){</p>
+<p>​           $(this).prop(‘src’,’img/broken.png’).addClass(‘broken-image’)</p>
+<p>​       }</p>
+<p>​    })</p>
 <p><strong>四、悬停切换</strong></p>
 <p>当用户鼠标悬停在可点击的元素上时，可添加类到元素中，反之则移除类。</p>
-<p><img src="D:\JisBlog\source\img\04.png"></p>
+<p>$(selector).hover(function(){</p>
+<p>​    $(this).addClass(‘hover’)</p>
+<p>},function(){</p>
+<p>   $(this).removeClass(‘hover’)</p>
+<p>})</p>
 <p>只需要添加必要的 CSS 即可。更简单的方法是使用 toggleClass() 方法。</p>
-<p><img src="D:\JisBlog\source\img\05.png"></p>
+<p>$(selector).hover(function(){</p>
+<p>​    $(this).toggleClass(‘hover’)</p>
+<p>})</p>
 <p><strong>五、淡入淡出/显示隐藏</strong></p>
-<p><img src="D:\JisBlog\source\img\06.png"></p>
+<p>//Fade</p>
+<p>$(‘.btn’).click(function(){</p>
+<p>   $(‘.element’).fadeToggle(‘slow’)</p>
+<p>});</p>
+<p>//Toggle</p>
+<p>$(‘.btn’).click(function(){</p>
+<p>   $(‘.element’).slideToggle(‘slow’)</p>
+<p>});</p>
 <p><strong>六、鼠标滚轮</strong></p>
 <p>$(‘#content’).on(“mousewheel DOMMouseScroll”, <strong>function</strong> (event) {</p>
 <p>  <em>// chrome &amp; ie || // firefox</em></p>
@@ -777,7 +801,8 @@ var watchExampleVM = new Vue({
 <p>});</p>
 <p><strong>七、鼠标坐标</strong></p>
 <p>1、JavaScript实现</p>
-<p>X:<input id="xxx" type="text" /> Y:<input id="yyy" type="text" /></p>
+<p>X:<input id="xxx" type="text"/></p>
+<p>Y:<input id="yyy" type="text"/></p>
 <p><strong>function</strong> mousePosition(ev){</p>
 <p>  <strong>if</strong> (ev.pageX || ev.pageY){</p>
 <p>​    <strong>return</strong> {x:ev.pageX, y:ev.pageY};</p>
@@ -877,7 +902,7 @@ var watchExampleVM = new Vue({
 <p>$( window ).orientationchange();</p>
 <p><strong>十五、获得/失去焦点</strong></p>
 <p>1、JavaScript实现</p>
-<input id="i_input" type="text" value="会员卡号/手机号"/>
+<input id="ii" type="text" value="会员卡号/手机号"/>
 
 <p><em>// JavaScript</em></p>
 <p>window.onload = <strong>function</strong>(){</p>
