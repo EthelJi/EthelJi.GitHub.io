@@ -719,6 +719,246 @@ var watchExampleVM = new Vue({
 
 
   
+    <article id="post-Javasript中常用代码总结" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/04/13/Javasript%E4%B8%AD%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E6%80%BB%E7%BB%93/" class="article-date">
+  	<time datetime="2019-04-13T10:24:40.000Z" itemprop="datePublished">2019-04-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/13/Javasript%E4%B8%AD%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E6%80%BB%E7%BB%93/">
+        Javasript中常用代码总结
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>一、预加载图像</strong></p>
+<p>如果你的网页中需要使用大量初始不可见的（例如，悬停的）图像，那么可以预加载这些图像。</p>
+<p><img src="D:\JisBlog\source\img\02.png"></p>
+<p><strong>二、检查图像是否加载</strong></p>
+<p>有时为了继续脚本，你可能需要检查图像是否全部加载完毕。</p>
+<p><img src="D:\JisBlog\source\img\01.png"></p>
+<p>也可以使用 ID 或 CLASS 替换<img> 标签来检查某个特定的图像是否被加载。</p>
+<p><strong>三、自动修复破坏的图像</strong></p>
+<p><img src="D:\JisBlog\source\img\03.png"></p>
+<p><strong>四、悬停切换</strong></p>
+<p>当用户鼠标悬停在可点击的元素上时，可添加类到元素中，反之则移除类。</p>
+<p><img src="D:\JisBlog\source\img\04.png"></p>
+<p>只需要添加必要的 CSS 即可。更简单的方法是使用 toggleClass() 方法。</p>
+<p><img src="D:\JisBlog\source\img\05.png"></p>
+<p><strong>五、淡入淡出/显示隐藏</strong></p>
+<p><img src="D:\JisBlog\source\img\06.png"></p>
+<p><strong>六、鼠标滚轮</strong></p>
+<p>$(‘#content’).on(“mousewheel DOMMouseScroll”, <strong>function</strong> (event) {</p>
+<p>  <em>// chrome &amp; ie || // firefox</em></p>
+<p>  <strong>var</strong> delta = (event.originalEvent.wheelDelta &amp;&amp; (event.originalEvent.wheelDelta &gt; 0 ? 1 : -1)) ||</p>
+<p>​    (event.originalEvent.detail &amp;&amp; (event.originalEvent.detail &gt; 0 ? -1 : 1)); </p>
+<p>  <strong>if</strong> (delta &gt; 0) {</p>
+<p>​    console.log(‘mousewheel top’);</p>
+<p>  } <strong>else</strong> <strong>if</strong> (delta &lt; 0) {</p>
+<p>​    console.log(‘mousewheel bottom’);</p>
+<p>  }</p>
+<p>});</p>
+<p><strong>七、鼠标坐标</strong></p>
+<p>1、JavaScript实现</p>
+<p>X:<input id="xxx" type="text" /> Y:<input id="yyy" type="text" /></p>
+<p><strong>function</strong> mousePosition(ev){</p>
+<p>  <strong>if</strong> (ev.pageX || ev.pageY){</p>
+<p>​    <strong>return</strong> {x:ev.pageX, y:ev.pageY};</p>
+<p>  }</p>
+<p>  <strong>return</strong> {</p>
+<p>​    x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,</p>
+<p>​    y:ev.clientY + document.body.scrollTop - document.body.clientTop</p>
+<p>  };</p>
+<p>}</p>
+<p><strong>function</strong> mouseMove(ev){</p>
+<p>  ev = ev || window.event;</p>
+<p>  <strong>var</strong> mousePos = mousePosition(ev);</p>
+<p>  document.getElementById(‘xxx’).value = mousePos.x;</p>
+<p>  document.getElementById(‘yyy’).value = mousePos.y;</p>
+<p>}</p>
+<p>document.onmousemove = mouseMove;</p>
+<p>2、jQuery实现</p>
+<p>$(‘#ele’).click(<strong>function</strong>(event){</p>
+<p>  <em>//获取鼠标在图片上的坐标</em></p>
+<p>  console.log(‘X：’ + event.offsetX+’ Y:’ + event.offsetY);</p>
+<p>  <em>//获取元素相对于页面的坐标</em></p>
+<p>  console.log(‘X：’+$(<strong>this</strong>).offset().left+’ Y:’+$(<strong>this</strong>).offset().top);</p>
+<p>});</p>
+<p><strong>八、禁止移动端浏览器页面滚动</strong></p>
+<p>1、HTML实现</p>
+<body ontouchmove="event.preventDefault()" >
+
+<p>2、JavaScript实现</p>
+<p>document.addEventListener(‘touchmove’, <strong>function</strong>(event) {</p>
+<p>  event.preventDefault();</p>
+<p>});</p>
+<p><strong>九、阻止默认行为</strong></p>
+<p><em>// JavaScript</em></p>
+<p>document.getElementById(‘btn’).addEventListener(‘click’, <strong>function</strong> (event) {</p>
+<p>  event = event || window.event；</p>
+<p>  <strong>if</strong> (event.preventDefault){</p>
+<p>​    <em>// W3C</em></p>
+<p>​    event.preventDefault();</p>
+<p>  } <strong>else</strong>{</p>
+<p>​    <em>// IE</em></p>
+<p>​    event.returnValue = <strong>false</strong>;</p>
+<p>  }</p>
+<p>}, <strong>false</strong>);</p>
+<p><em>// jQuery</em></p>
+<p>$(‘#btn’).on(‘click’, <strong>function</strong> (event) {</p>
+<p>  event.preventDefault();</p>
+<p>});</p>
+<p><strong>十、阻止冒泡</strong></p>
+<p><em>// JavaScript</em></p>
+<p>document.getElementById(‘btn’).addEventListener(‘click’, <strong>function</strong> (event) {</p>
+<p>  event = event || window.event；</p>
+<p>  <strong>if</strong> (event.stopPropagation){</p>
+<p>​    <em>// W3C</em></p>
+<p>​    event.stopPropagation();</p>
+<p>  } <strong>else</strong>{</p>
+<p>​    <em>// IE</em></p>
+<p>​    event.cancelBubble = <strong>true</strong>;</p>
+<p>  }</p>
+<p>}, <strong>false</strong>);</p>
+<p><em>// jQuery</em></p>
+<p>$(‘#btn’).on(‘click’, <strong>function</strong> (event) {</p>
+<p>  event.stopPropagation();</p>
+<p>});</p>
+<p><strong>十一、检测浏览器是否支持svg</strong></p>
+<p><strong>function</strong> isSupportSVG() {</p>
+<p>  <strong>var</strong> SVG_NS = ‘<a target="_blank" rel="noopener" href="http://www.w3.org/2000/svg&#39;">http://www.w3.org/2000/svg&#39;</a>;</p>
+<p>  <strong>return</strong> !!document.createElementNS &amp;&amp;!!document.createElementNS(SVG_NS,’svg’).createSVGRect;</p>
+<p>}</p>
+<p>console.log(isSupportSVG());</p>
+<p><strong>十二、检测浏览器是否支持canvas</strong></p>
+<p><strong>function</strong> isSupportCanvas() {</p>
+<p>  <strong>if</strong>(document.createElement(‘canvas’).getContext){</p>
+<p>​    <strong>return</strong> <strong>true</strong>;</p>
+<p>  }<strong>else</strong>{</p>
+<p>​    <strong>return</strong> <strong>false</strong>;</p>
+<p>  }</p>
+<p>}</p>
+<p>console.log(isSupportCanvas());</p>
+<p><strong>十三、检测是否是微信浏览器</strong></p>
+<p><strong>function</strong> isWeiXinClient() {</p>
+<p>  <strong>var</strong> ua = navigator.userAgent.toLowerCase();</p>
+<p>  <strong>if</strong> (ua.match(/MicroMessenger/i)==”micromessenger”) {</p>
+<p>​    <strong>return</strong> <strong>true</strong>;</p>
+<p>  } <strong>else</strong> {</p>
+<p>​    <strong>return</strong> <strong>false</strong>;</p>
+<p>  }</p>
+<p>}</p>
+<p>alert(isWeiXinClient());</p>
+<p><strong>十四、强制移动端页面横屏显示</strong></p>
+<p>$( window ).on( “orientationchange”, <strong>function</strong>( event ) {</p>
+<p>  <strong>if</strong> (event.orientation==’portrait’) {</p>
+<p>​    $(‘body’).css(‘transform’, ‘rotate(90deg)’);</p>
+<p>  } <strong>else</strong> {</p>
+<p>​    $(‘body’).css(‘transform’, ‘rotate(0deg)’);</p>
+<p>  }</p>
+<p>});</p>
+<p>$( window ).orientationchange();</p>
+<p><strong>十五、获得/失去焦点</strong></p>
+<p>1、JavaScript实现</p>
+<input id="i_input" type="text" value="会员卡号/手机号"/>
+
+<p><em>// JavaScript</em></p>
+<p>window.onload = <strong>function</strong>(){</p>
+<p>  <strong>var</strong> oIpt = document.getElementById(“i_input”);</p>
+<p>  <strong>if</strong>(oIpt.value == “会员卡号/手机号”){</p>
+<p>​    oIpt.style.color = “#888”;</p>
+<p>  }<strong>else</strong>{</p>
+<p>​    oIpt.style.color = “#000”;</p>
+<p>  };</p>
+<p>  oIpt.onfocus = <strong>function</strong>(){</p>
+<p>​    <strong>if</strong>(<strong>this</strong>.value == “会员卡号/手机号”){</p>
+<p>​      <strong>this</strong>.value=””;</p>
+<p>​      <strong>this</strong>.style.color = “#000”;</p>
+<p>​      <strong>this</strong>.type = “password”;</p>
+<p>​    }<strong>else</strong>{</p>
+<p>​      <strong>this</strong>.style.color = “#000”;</p>
+<p>​    }</p>
+<p>  };</p>
+<p>oIpt.onblur = <strong>function</strong>(){</p>
+<p>​    <strong>if</strong>(<strong>this</strong>.value == “”){</p>
+<p>​      <strong>this</strong>.value=”会员卡号/手机号”;</p>
+<p>​      <strong>this</strong>.style.color = “#888”;</p>
+<p>​      <strong>this</strong>.type = “text”;</p>
+<p>​    }</p>
+<p>  };</p>
+<p>}</p>
+<p>2、jQuery实现</p>
+<input type="text" class="oldpsw" id="showPwd" value="请输入您的注册密码"/>
+
+<input type="password" name="psw" class="oldpsw" id="password" value="" style="display:none;"/>
+
+<p><em>// jQuery</em></p>
+<p>$(“#showPwd”).focus(<strong>function</strong>() {</p>
+<p>  <strong>var</strong> text_value=$(<strong>this</strong>).val();</p>
+<p>  <strong>if</strong> (text_value ==’请输入您的注册密码’) {</p>
+<p>​    $(“#showPwd”).hide();</p>
+<p>​    $(“#password”).show().focus();</p>
+<p>  }</p>
+<p>});</p>
+<p>$(“#password”).blur(<strong>function</strong>() {</p>
+<p>  <strong>var</strong> text_value = $(<strong>this</strong>).val();</p>
+<p>  <strong>if</strong> (text_value == “”) {</p>
+<p>​    $(“#showPwd”).show();</p>
+<p>​    $(“#password”).hide();</p>
+<p>  }</p>
+<p>});</p>
+<p><strong>十六、当前日期</strong></p>
+<p><strong>var</strong> calculateDate = <strong>function</strong>(){</p>
+<p>  <strong>var</strong> date = <strong>new</strong> Date();</p>
+<p>  <strong>var</strong> weeks = [“日”,”一”,”二”,”三”,”四”,”五”,”六”];</p>
+<p>  <strong>return</strong> date.getFullYear()+”年”+(date.getMonth()+1)+”月”+</p>
+<p>  date.getDate()+”日 星期”+weeks[date.getDay()];</p>
+<p>}</p>
+<p>$(<strong>function</strong>(){</p>
+<p>  $(“#dateSpan”).html(calculateDate());</p>
+<p>});</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-javascript中this的指向问题" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
