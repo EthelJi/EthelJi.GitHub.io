@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        Hexo
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link rel="stylesheet" href="/css/style/github.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body>
+    <div class="container">
+        <div class="header">
+    <!-- <div class="logo">
+        <a href="/">Hexo</a>
+    </div> -->
+    <div class="logo">
+        <img src="/images/logo.png" alt="Logo">
+    </div>
+    <div class="nav">
+        <ul class="menu">
+            
+                <li class="menu-item">
+                    <a href="/" class="menu-item-link">
+                        Home
+                    </a>
+                </li>
+            
+                <li class="menu-item">
+                    <a target="_blank" rel="noopener" href="https://github.com/loveminimal" class="menu-item-link">
+                        Github
+                    </a>
+                </li>
+                
+        </ul>
+    </div>
+</div>
+        <div class="article">
+    <!-- <div class="article-title">
+        <h2>
+            实现Vue CLI的首屏加载优化
+        </h2>
+    </div> -->
+    <div class="article-meta">
+        <div class="article-date">
+            <i class="fas fa-edit"></i>
+            2020/05/20 Wed 14:48&nbsp;&nbsp;&nbsp;
+            <span class="just-a-temp"><span>
+            <i class="fas fa-redo"></i>
+            2020/08/16 Sun 18:35
+        </div>
+    </div>
+    <div class="article-content">
+        <p>​       在Vue项目中，引入到工程中的所有js、css文件，编译时都会被打包进vendor.js，浏览器在加载该文件之后才能开始显示首屏。若是引入的库众多，那么vendor.js文件体积将会相当的大，影响首屏的体验。</p>
+<h4 id="一、首屏加载缓慢的原因分析"><a href="#一、首屏加载缓慢的原因分析" class="headerlink" title="一、首屏加载缓慢的原因分析"></a>一、首屏加载缓慢的原因分析</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vuecli 2.x自带了分析工具</span><br><span class="line">只要运行 npm run build --report</span><br></pre></td></tr></table></figure>
+
+<p>如果是 <code>vuecli 3</code>的话，先安装插件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm intall webpack-bundle-analyzer –save-dev</span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>vue.config.js</code>中对 <code>webpack</code>进行配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">chainWebpack: (config) &#x3D;&gt; &#123;   </span><br><span class="line">&#x2F;* 添加分析工具*&#x2F;    </span><br><span class="line"> if (process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#39;production&#39;) &#123;</span><br><span class="line">    if (process.env.npm_config_report) &#123; </span><br><span class="line">    config </span><br><span class="line">    .plugin(&#39;webpack-bundle-analyzer&#39;) </span><br><span class="line">    .use(require(&#39;webpack-bundle-analyzer&#39;).BundleAnalyzerPlugin)                </span><br><span class="line">    .end();            </span><br><span class="line">     config.plugins.delete(&#39;prefetch&#39;)        </span><br><span class="line">    &#125;    </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再运行 npm run build –report，会在浏览器打开一个项目打包的情况图，便于直观地比较各个 bundle文件的大小，我们就会发现项目中所有的依赖，所有的路由，都被打包进了同一个文件中。另外，在浏览器中，也可以通过 converge来查看代码的使用状况。</p>
+<h4 id="二、首屏加载速度的优化方案："><a href="#二、首屏加载速度的优化方案：" class="headerlink" title="二、首屏加载速度的优化方案："></a>二、首屏加载速度的优化方案：</h4><h5 id="2-1-路由懒加载"><a href="#2-1-路由懒加载" class="headerlink" title="2.1 路由懒加载"></a>2.1 路由懒加载</h5><blockquote>
+<p>当打包构建应用时，JavaScript包会变得非常大，影响页面加载。<br>如果我们能把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就更加高效了。</p>
+</blockquote>
+<p>在一开始就下载完所有路由对应的组件文件，这明显是不合适的，这就像下载一个 <code>app</code>了，所以我们就需要使用路由懒加载：</p>
+<p>在 <code>router.js</code>文件中，原来的静态引用方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import ShowBlogs from &#39;@&#x2F;components&#x2F;ShowBlogs&#39;</span><br><span class="line">routes:[ </span><br><span class="line">    path: &#39;Blogs&#39;, </span><br><span class="line">    name: &#39;ShowBlogs&#39;, </span><br><span class="line">    component: ShowBlogs</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>改为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">routes:[ </span><br><span class="line">  path: &#39;Blogs&#39;,</span><br><span class="line">  name: &#39;ShowBlogs&#39;,</span><br><span class="line">  component: () &#x3D;&gt; import(&#39;.&#x2F;components&#x2F;ShowBlogs.vue&#39;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>以函数的形式动态引入，这样就可以把各自的路由文件分别打包，只有在解析给定的路由时，才会下载路由组件，</p>
+<p>首屏需要加载的文件被分流出去一部分，如果是在 <code>vuecli 3</code>中，我们还需要多做一步工作，因为 <code>vuecli 3</code>默认开启 <code>prefetch</code>(预先加载模块)，提前获取用户未来可能会访问的内容，在首屏会把这十几个路由文件，都一口气下载了，所以我们要关闭这个功能，在 <code>vue.config.js</code>中设置</p>
+<p>参考官网的做法：</p>
+<p>// vue.config.js</p>
+<p>module.exports = {</p>
+<p>   chainWebpack : config =&gt;{</p>
+<p>   //移除prefetch 插件</p>
+<p>  config.plugin.delete(‘prefetch’)</p>
+<p>   // 修改它的选项</p>
+<p>   config.plugin(‘prefetch’).tap(options =&gt;{</p>
+<p>​       options[0].fileBlacklist=options[0].fileBlacklist || [ ]<br>​       options[0].fileBlacklist.push(/myasyncRoute(.) + ? .js$/)</p>
+<p>​        return options</p>
+<p>​      })</p>
+<p>​    }</p>
+<p>}</p>
+<p>当prefetch 插件被禁用时，可以通过webpack的内联注释手动选定要提前获取的代码区块：</p>
+<p>  import ( /* webpackPrefetch : true */  ‘ ./someAsyncComponent.vue’)</p>
+<p>设置完毕后，首屏就只会加载当前页面路由的组件了</p>
+<h5 id="2-2-element-ui按需加载"><a href="#2-2-element-ui按需加载" class="headerlink" title="2.2 element-ui按需加载"></a>2.2 element-ui按需加载</h5><p>首屏需要加载的依赖包，其中 element-ui占了很大一部分，原本的引进方式引进了整个包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import ElementUI from &#39;element-ui&#39;</span><br><span class="line">Vue.use(ElementUI)</span><br></pre></td></tr></table></figure>
+
+<p>但实际上用到的组件只有按钮，分页，表格，输入与警告，所以我们要<strong>按需引用</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Button, Input, Pagination, Table, TableColumn, MessageBox &#125; from &#39;element-ui&#39;;</span><br><span class="line">Vue.use(Button)</span><br><span class="line">Vue.use(Input)</span><br><span class="line">Vue.use(Pagination)</span><br><span class="line">Vue.prototype.$alert &#x3D; MessageBox.alert</span><br></pre></td></tr></table></figure>
+
+<p>注意 <code>MessageBox</code>注册方法的区别，并且我们虽然用到了 <code>alert</code>，但并不需要引入 <code>Alert</code>组件</p>
+<p>在 <code>.babelrc</code>文件中添加（ <code>vue-cli 3</code>要先安装 <code>babel-plugin-component</code>)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">plugins: [    </span><br><span class="line">  [      </span><br><span class="line">     &quot;component&quot;, </span><br><span class="line">     &#123; </span><br><span class="line">         &quot;libraryName&quot;: &quot;element-ui&quot;,</span><br><span class="line">         &quot;styleLibraryName&quot;: &quot;theme-chalk&quot;     </span><br><span class="line">     &#125;    </span><br><span class="line">   ]  </span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p><code>element-ui</code>小了很多，不过看到那个显眼的 <code>table.js</code>后想到， <code>table</code>组件只有后台管理页面用到了，不需要全局注册，所以我们删除 <code>main.js</code>中 <code>Table</code>和 <code>TablColumn</code>的引用，并在后台组件中局部注册，<code>table</code>就被拆分到了路由文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Table, TableColumn &#125; from &quot;element-ui&quot;;</span><br><span class="line">components: &#123;</span><br><span class="line">   &quot;el-table&quot;: Table,  </span><br><span class="line">   &quot;el-table-column&quot;: TableColumn </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-3-组件重复打包"><a href="#2-3-组件重复打包" class="headerlink" title="2.3 组件重复打包"></a>2.3 组件重复打包</h5><p>如果有两个路由文件都引用了 <code>codemirror.js</code>，就会造成重复下载，我们可以在 <code>webpack</code>的 <code>config</code>文件中，修改 <code>CommonsChunkPlugin</code>的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">minChunks: 3</span><br></pre></td></tr></table></figure>
+
+<p>把3改为2，就会把使用2次及以上的包抽离出来，放进公共依赖文件，不过由于首页也有复用的组件，所以首页也会下载这个公共依赖文件。</p>
+<h5 id="2-4-gzip"><a href="#2-4-gzip" class="headerlink" title="2.4 gzip"></a>2.4 gzip</h5><p>拆完包之后，我们用 <code>gzip</code>再次做一下压缩，安装 <code>compression-webpack-plugin</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnmp i compression-webpack-plugin -D</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>vue.congig.js</code>中引入并修改 <code>webpack</code>配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const CompressionPlugin &#x3D; require(&#39;compression-webpack-plugin&#39;)</span><br><span class="line">configureWebpack: (config) &#x3D;&gt; &#123;</span><br><span class="line">   if (process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#39;production&#39;) &#123;</span><br><span class="line">   &#x2F;&#x2F; 为生产环境修改配置...            </span><br><span class="line">   config.mode &#x3D; &#39;production&#39;           </span><br><span class="line">   return &#123;                </span><br><span class="line">       plugins: [new CompressionPlugin(&#123;                    </span><br><span class="line">       test: &#x2F;\.js$|\.html$|\.css&#x2F;,  &#x2F;&#x2F;匹配文件名                    </span><br><span class="line">       threshold: 10240,    &#x2F;&#x2F;对超过10k的数据进行压缩                   </span><br><span class="line">       deleteOriginalAssets: false   &#x2F;&#x2F;是否删除原文件               </span><br><span class="line">       &#125;)]           </span><br><span class="line">    &#125;      </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在服务器我们也要做相应的配置，如果发送请求的浏览器支持 <code>gzip</code>，就发送给它 <code>gzip</code>格式的文件，如果服务器是用 <code>express</code>框架搭建的，只要安装一下 <code>compression</code>就能使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const compression &#x3D; require(&#39;compression&#39;)app.use(compression())</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，后面这一句，要放在所有其他中间件注册之前。</p>
+<h5 id="2-5-其他优化方法"><a href="#2-5-其他优化方法" class="headerlink" title="2.5 其他优化方法"></a>2.5 其他优化方法</h5><ol start="2">
+<li>将打包生成后 index.html页面 里面的JS文件引入方式放在 body 的最后</li>
+<li>用cdn缓存代替npm安装包，将引用的外部js、css文件剥离开来，不编译到vendor.js中</li>
+<li>使用更高级的SSR服务端渲染框架，比如nuxt来做首屏加载优化</li>
+</ol>
+
+    </div>
+
+    <div class="totop">ToTOP</div>
+</div>
+        <div class="footer">
+    <a href="#">
+        2018 <i class="fab fa-studiovinari"></i> John Doe <i class="fas fa-angle-double-up"></i>
+    </a>
+</div>
+
+
+<script src="/js/totop.js"></script>
+
+
+<script src="/js/search.js"></script>
+
+    </div>
+</body>
+
+</html>
